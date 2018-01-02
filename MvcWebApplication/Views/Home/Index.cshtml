@@ -1,0 +1,49 @@
+﻿@model List<BlogPost>
+@{
+    ViewData["Title"] = "Index";
+}
+<h2>Index</h2>
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+
+@using(Html.BeginForm()) {
+    <p>
+        Name: <input type="text" name="Author">
+        <button type="submit">Search</button>
+    </p>
+}
+
+<table class="table">
+    <thead>
+        <tr>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach(var item in Model) {
+            <tr>
+                <td>
+                    @item.Author
+                </td>
+                <td>
+                    @item.Title
+                </td>
+                <td>
+                    @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
+                    @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
+                    @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    @item.ID
+                    @item.CreateDate
+                </td>
+                <td>
+                    @item.Content
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
