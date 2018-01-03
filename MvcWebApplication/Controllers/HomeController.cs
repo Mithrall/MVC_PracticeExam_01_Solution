@@ -1,11 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using MvcWebApplication.Models;
-using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Http;
 
 namespace MvcWebApplication.Controllers {
@@ -24,8 +21,11 @@ namespace MvcWebApplication.Controllers {
 
             try {
                 var Author = HttpContext.Session.GetString("Author");
-                tempList = BlogPostRepository.blogPostList.FindAll(x => x.Author == Author);
-
+                if(Author != "") {
+                    tempList = BlogPostRepository.blogPostList.FindAll(x => x.Author == Author);
+                } else {
+                    tempList = BlogPostRepository.blogPostList;
+                }
             } catch(Exception) {
                 throw;
             }
@@ -39,11 +39,47 @@ namespace MvcWebApplication.Controllers {
         }
         [HttpPost]
         public IActionResult Index(string Author) {
+            if(Author == null) {
+                Author = "";
+            }
             tempList = BlogPostRepository.blogPostList.FindAll(x => x.Author == Author);
 
             HttpContext.Session.SetString("Author", Author);
 
             return RedirectToAction("Index");
+        }
+
+        public IActionResult About() {
+            var Author = HttpContext.Session.GetString("Author");
+            if(Author == "" || Author == null) {
+                return Redirect("Index");
+            } else {
+                
+
+                return View((object)Author);
+            }
+        }
+        [HttpPost]
+        public IActionResult About(string Title, string Content) {
+            if(Title == "" || Title == null || Content == "" || Content == null) {
+                return View();
+            } else {
+
+                var nextID = BlogPostRepository.blogPostList.Last<BlogPost>().ID++;
+
+                var tempPost = new BlogPost {
+                    ID = nextID,
+                    Title = Title,
+                    Content = Content,
+                    CreateDate = DateTime.Now,
+                    Author = HttpContext.Session.GetString("Author")
+                };
+                lock(BlogPostRepository.blogPostList) {
+                    BlogPostRepository.blogPostList.Add(tempPost);
+                }
+
+                return Redirect("Index");
+            }
         }
     }
 }

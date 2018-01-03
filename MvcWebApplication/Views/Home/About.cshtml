@@ -1,7 +1,19 @@
-﻿@{
-    ViewData["Title"] = "About";
+﻿@model string
+@{
+    ViewData["Title"] = "New Post";
 }
-<h2>@ViewData["Title"]</h2>
-<h3>@ViewData["Message"]</h3>
+<br />
+<br />
+<br />
+<br />
+@Html.Raw(TempData["msg"])
+<h1>Author: @Model</h1>
 
-<p>Use this area to provide additional information.</p>
+@using(Html.BeginForm()) {
+    <p>
+        Title: <input type="text" name="Title" />
+        Content: <textarea type="text" name="Content"></textarea>
+
+        <button type="submit">Post</button>
+    </p>
+}

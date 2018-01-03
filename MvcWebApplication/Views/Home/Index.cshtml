@@ -2,10 +2,10 @@
 @{
     ViewData["Title"] = "Index";
 }
-<h2>Index</h2>
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
+<br />
+<br />
+<br />
+<br />
 
 @using(Html.BeginForm()) {
     <p>
@@ -15,35 +15,24 @@
 }
 
 <table class="table">
-    <thead>
-        <tr>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach(var item in Model) {
+    @foreach(var item in Model) {
+        <thead>
             <tr>
-                <td>
-                    @item.Author
-                </td>
-                <td>
-                    @item.Title
-                </td>
-                <td>
-                    @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
-                    @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
-                    @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
-                </td>
+                <th>Author: @item.Author</th>
+                <th>Title: @item.Title</th>
             </tr>
+        </thead>
+        <tbody>
             <tr>
                 <td>
-                    @item.ID
-                    @item.CreateDate
+                    <p>ID: @item.ID</p>
+                    <p>Date: @item.CreateDate</p>
                 </td>
                 <td>
                     @item.Content
                 </td>
             </tr>
-        }
-    </tbody>
+
+        </tbody>
+    }
 </table>
